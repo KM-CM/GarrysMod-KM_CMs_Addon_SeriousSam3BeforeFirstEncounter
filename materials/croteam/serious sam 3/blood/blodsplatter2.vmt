@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	$basetexture "croteam/serious sam 3/particles/Blood/blodsplatter2"
+	$translucent 1
+	$vertexcolor 1
+	$vertexalpha 1
+}
