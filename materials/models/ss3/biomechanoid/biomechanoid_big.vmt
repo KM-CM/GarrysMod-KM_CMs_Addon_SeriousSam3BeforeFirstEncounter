@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\biomech_big"
+	$bumpmap       "models\ss3\biomechanoid\biomech_n"
+    	 //"$selfillum" 0.5
+	//$selfillummask "models\ss3\biomechanoid\biomech_big"
+	//"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.07 0.07 0.07 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges" "[.3 .82 31]"
+	
+	$rimlight 1
+	$rimlightexponent       1200
+	$rimlightboost          2.5	
+	$nodecal 1
+ 
+}
