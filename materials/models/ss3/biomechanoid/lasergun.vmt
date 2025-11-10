@@ -1,0 +1,23 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\lasergun"
+	"$bumpmap" "models\ss3\biomechanoid\lasergun_n"
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.03 0.03 0.03 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges" "[.3 .82 31]"
+		$nodecal 1
+ 
+
+	
+ 
+
+}

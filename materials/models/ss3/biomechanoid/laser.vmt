@@ -1,0 +1,12 @@
+"UnlitGeneric"
+//"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\laserblue"
+	 $translucent 1
+ 	 $selfillummask "models\ss3\biomechanoid\laserblue"
+	 $nodecal 1
+  "$detail"  "models\ss3\biomechanoid\laserblue"
+	"$detailscale" "1"
+	"$detailblendmode" "5"
+ 
+}

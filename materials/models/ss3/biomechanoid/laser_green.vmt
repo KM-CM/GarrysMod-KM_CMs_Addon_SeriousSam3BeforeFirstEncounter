@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\laserblue"
+	 $translucent 2
+ 	 $selfillummask "models\ss3\biomechanoid\laserblue"
+		$nodecal 1
+}
