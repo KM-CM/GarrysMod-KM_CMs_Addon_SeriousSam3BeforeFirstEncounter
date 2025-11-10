@@ -1,0 +1,21 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/ss3/reptiloid/rept_orange"
+	"$bumpmap"	"models/ss3/reptiloid/rept_n"
+ 
+	
+	//"$color2" "[0.5 0.5 0.5]"
+	"$alphatest"	"1"
+	"$nocull"	"1"
+	
+ 	//"$phong" "1"
+	//"$phongboost" ".1"
+	//"$phongexponent" "20"
+	//"$phongalbedotint" "1"
+	//"$phongfresnelranges" "[.3 .82 31]"
+	
+	$rimlight 1
+	$rimlightexponent       200
+	$rimlightboost          .5	
+	
+}

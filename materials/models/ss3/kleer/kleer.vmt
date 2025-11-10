@@ -1,0 +1,9 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\kleer\kleer"
+	"$bumpmap" "models\ss3\kleer\kleer_n"
+	//$translucent 1
+	//$additive 1
+ 
+ 
+}
