@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\khnum\fireball"
+
+
+ 
+
+	"$nocull" "1"	 
+
+  	"$selfillum" 1
+    "$selfillummask"  "models\ss3\khnum\fireball"
+	"$selfIllumFresnelMinMaxExp"	"[0 0 0]"
+
+"Proxies"
+{
+    Sine
+{
+    "resultVar"    "$selfillumtint" 
+    "sineperiod"    3
+    "sinemin"    "5"
+    "sinemax"    "20"
+}
+
+}
