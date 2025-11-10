@@ -85,7 +85,7 @@ Actor_RegisterSchedule( "MentalHordeBeHeadedKamikazeTick", function( self, sched
 	v = v + self:GetUp() * 50
 	if v:DistToSqr( enemy:NearestPoint( v ) ) <= f then
 		if enemy.__ACTOR_BULLSEYE__ && trueenemy:GetPos():DistToSqr( enemy:GetPos() ) > f then
-			enemy:Remove()
+			self:ReportPositionAsClear( enemy:GetPos() )
 		else
 			self.bBlowUp = true
 		end
