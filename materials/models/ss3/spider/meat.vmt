@@ -1,0 +1,21 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\spider\meat"
+	$bumpmap      "models\ss3\spider\meat_normal"
+
+    	"$surfaceprop" "flesh"
+
+ 	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.1 0.1 0.1 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35
+
+  	"$phong" "1"
+	"$phongexponent" "45"
+	"$phongboost"	"10"
+	"$phongfresnelranges"	"[.05 .25 1]"
+
+
+
+}
