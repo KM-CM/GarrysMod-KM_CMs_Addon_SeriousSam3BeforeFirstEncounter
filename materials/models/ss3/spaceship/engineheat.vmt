@@ -1,0 +1,11 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\spaceship\water"
+  $alphatest 1
+ $vertexalpha 1
+ $translucent 1
+ $additive 1
+	 	"$color2" "[.1 .1 .1]"
+	 
+
+}
