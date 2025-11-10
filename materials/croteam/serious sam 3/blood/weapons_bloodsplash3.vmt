@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	$basetexture "croteam/serious sam 3/particles/Blood/weapons_bloodsplash3"
+	$normalmap "croteam/serious sam 3/particles/Blood/weapons_bloodsplash3_n"
+	$translucent 1
+	$vertexcolor 1
+	$vertexalpha 1
+}
