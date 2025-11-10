@@ -1,0 +1,23 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\arachnoid\claw"
+	"$bumpmap"  "models\ss3\arachnoid\claw_normal"
+
+	"$surfaceprop" "flesh"
+	"$phong" "1"
+	"$phongfresnelranges"	"[0.5 4.75 5]"
+	"$phongboost"	".3"
+	"$envmaptint"	"[.135 .135 .135]"
+	"$envmapfresnel"	"1.4"
+	"$normalmapalphaenvmapmask" 1
+	"$halflambert" "1"
+	"$ambientocclusion" "1"							
+	"$phongexponenttexture" "models/ss3/exponent"
+	"$cloakPassEnabled" 		"1"						
+	"$phongfresnelranges"	"[ .2 1.2 8]"	
+
+	
+	$nodecal 1
+	"$nocull" "1"
+
+}
