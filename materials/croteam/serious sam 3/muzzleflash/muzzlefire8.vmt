@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	$basetexture "croteam/serious sam 3/particles/muzzleflash/muzzlefire8"
+	$additive 1
+	$vertexcolor 1
+	$vertexalpha 1
+}
