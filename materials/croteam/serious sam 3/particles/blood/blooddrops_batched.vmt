@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	$basetexture "croteam/serious sam 3/particles/blood/blooddrops_batched"
+	$translucent 1
+	$vertexalpha 1
+	$vertexcolor 1
+	$NOLOD 1
+}
