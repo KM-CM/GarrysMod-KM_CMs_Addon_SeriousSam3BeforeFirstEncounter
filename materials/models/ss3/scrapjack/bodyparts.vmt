@@ -1,0 +1,30 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\scrapjack\bodyparts"
+	"$bumpmap" "models\ss3\scrapjack\bodyparts_n"
+	
+	"$surfaceprop" "metal"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.15 0.15 0.15 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+	"$envmapfresnel"	"1.4"
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges"	"[0.5 4.75 5]"
+	
+	$rimlight 1
+	$rimlightexponent       200
+	$rimlightboost          1.5	 
+ 	"$halflambert" "1"
+       	 
+	"$ambientocclusion" "1"	
+	
+
+	"$nocull" "1"
+ 
+}
