@@ -1,0 +1,13 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\rifleman\assault_rifle_crosshair"
+	"$translucent" "1"
+	"$color2" "{ 255 0 6 }"
+
+	"$detail"  "models\ss3\rifleman\concretestains"
+	"$detailblendfactor" "0.35"
+	"$detailscale" "0.2"
+	
+   
+
+}

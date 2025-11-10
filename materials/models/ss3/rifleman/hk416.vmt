@@ -1,0 +1,15 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/ss3/rifleman/assault_rifle"
+	"$bumpmap"     "models/ss3/rifleman/assault_rifle_n"
+	
+	"$phong" "1"
+	"$phongexponent" "5"
+	"$phongexponenttexture" "models/ss3/rifleman/assault_rifle_gloss"
+	"$phongfresnelranges" "[0 0.5 0.1]"
+	
+	"$rimlight" "1"
+	"$rimlightexponent" "2"
+	"$rimmask" "1"
+
+}

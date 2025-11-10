@@ -1,0 +1,26 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\rifleman\shotgun"
+ 	"$bumpmap" "models\ss3\rifleman\shotgun_n"
+	
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.1 0.1 0.1 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+ 
+	
+	"$normalmapalphaenvmapmask" 1
+	"$halflambert" "1"
+	"$ambientocclusion" "1"							
+	"$phongexponenttexture" "models\ss3\exponent"
+	"$cloakPassEnabled" 		"1"						
+	"$phongfresnelranges"	"[ .2 1.2 8]"	
+   
+
+}
