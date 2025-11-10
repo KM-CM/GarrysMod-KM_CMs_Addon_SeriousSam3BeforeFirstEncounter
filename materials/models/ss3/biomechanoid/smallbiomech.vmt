@@ -1,0 +1,37 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\smallbiomech"
+	"$bumpmap" "models\ss3\biomechanoid\smallbiomech_n"
+    	"$surfaceprop" "flesh"
+	"$phong" "1"
+	"$phongfresnelranges"	"[0.5 4.75 5]"
+	"$phongboost"	".3"
+	"$envmaptint"	"[.135 .135 .135]"
+	"$envmapfresnel"	"1.4"
+	"$normalmapalphaenvmapmask" 1
+	"$halflambert" "1"
+	"$ambientocclusion" "1"							
+	"$phongexponenttexture" "models\ss3\exponent"
+	"$cloakPassEnabled" 		"1"						
+	"$phongfresnelranges"	"[ .2 1.2 8]"	
+
+	//"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.01 0.01 0.01 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges" "[.3 .82 31]"
+	
+
+	"$nocull" "1"
+	$nodecal 1
+	$rimlight 1
+	$rimlightexponent       200
+	$rimlightboost          1.5	
+ 
+}

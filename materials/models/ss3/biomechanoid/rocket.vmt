@@ -1,0 +1,25 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\biomechanoid\Rocket"
+	"$bumpmap" "models\ss3\biomechanoid\rocket_n"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.2 0.2 0.2 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+ 
+  	"$color2" "{255 10 10}"
+  	"$blendtintbybasealpha" "1"
+
+	"$phong" "1"
+	"$phongboost" ".1"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges" "[32 0 11]"
+	
+	$rimlight 1
+	$rimlightexponent       200
+	$rimlightboost          1.5	 
+ 	$nodecal 1
+
+}
