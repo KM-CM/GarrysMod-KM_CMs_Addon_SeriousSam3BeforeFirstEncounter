@@ -1,0 +1,10 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\bullet\bullet"
+	$selfillum 1
+    $selfillummask  "models\ss3\bullet\bullet"
+ 
+ $additive 1	 
+	 
+
+}
