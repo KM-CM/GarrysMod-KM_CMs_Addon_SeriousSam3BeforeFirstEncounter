@@ -64,6 +64,54 @@ local CEntity_EmitSound = FindMetaTable( "Entity" ).EmitSound
 if !CLASS_MENTAL_HORDE then Add_NPC_Class "CLASS_MENTAL_HORDE" end
 ENT.iDefaultClass = CLASS_MENTAL_HORDE
 
+ENT.flLeapSpeed = 1024
+
+Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched )
+	local enemy = self.Enemy
+	if !IsValid( enemy ) then return true end
+	if !sched.bActed then
+		self:AddGestureSequence( self:LookupSequence "attack2" )
+		sched.flEndTimeVelocity = CurTime() + 1
+		sched.flEndTimeFull = CurTime() + 1.33
+		self:EmitSound "MentalHorde_KleerSkeleton_Leap"
+		sched.bActed = true
+	end
+	if CurTime() > sched.flEndTimeFull then return true end
+	if CurTime() > sched.flEndTimeVelocity then return end
+	self:AnimationSystemHalt()
+	self.vDesAim = self:GetForward()
+	self.loco:Approach( self:GetPos(), 1 )
+	self.loco:SetVelocity( self:GetForward() * self.flLeapSpeed )
+	local tHit = sched.tHit || {}
+	local v = self:GetPos() + self:OBBCenter()
+	local tr = util.TraceHull {
+		start = v,
+		endpos = v + self:GetForward() * 32,
+		mask = MASK_SOLID,
+		mins = Vector( -32, -32, -32 ),
+		maxs = Vector( 32, 32, 32 ),
+		filter = function( ent )
+			if ent == self || tHit[ ent ] then return end
+			tHit[ ent ] = true
+			if IsValid( ent ) && self:Disposition( ent ) != D_LI then
+				local dmg = DamageInfo()
+				dmg:SetDamage( 1024 )
+				dmg:SetDamageType( DMG_SLASH )
+				dmg:SetAttacker( self )
+				dmg:SetInflictor( self )
+				ent:TakeDamageInfo( dmg )
+				local dmg = DamageInfo()
+				dmg:SetDamage( 1024 )
+				dmg:SetDamageType( DMG_CLUB )
+				dmg:SetAttacker( self )
+				dmg:SetInflictor( self )
+				ent:TakeDamageInfo( dmg )
+			end
+		end
+	}
+	sched.tHit = tHit
+end )
+
 Actor_RegisterSchedule( "MentalHordeKleerSkeletonTick", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
@@ -73,9 +121,17 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonTick", function( self, sched )
 	if !pPath then pPath = Path "Follow" sched.pPath = pPath end
 	self:ComputeFlankPath( pPath, enemy )
 	self:MoveAlongPath( pPath, self.flTopSpeed )
-	local goal = pPath:GetCurrentGoal()
-	local v = self:GetPos()
-	if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+	local v = self:GetPos() + self:OBBCenter()
+	local f = self.flLeapSpeed * .5 // TODO: This needs better calculations!!!
+	if self:Visible( enemy ) && v:DistToSqr( enemy:NearestPoint( v ) ) <= f * f then
+		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
+		if self:GetForward():Dot( d ) > .99 then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
+		self.vDesAim = d
+	else
+		local goal = pPath:GetCurrentGoal()
+		local v = self:GetPos()
+		if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+	end
 end )
 
 function ENT:SelectSchedule( MyTable )
