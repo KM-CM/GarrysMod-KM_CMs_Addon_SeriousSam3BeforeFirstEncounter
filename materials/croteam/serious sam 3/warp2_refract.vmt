@@ -1,0 +1,8 @@
+Refract
+{
+	$normalmap "croteam/serious sam 3/particles/warp2"
+	$refractamount "-0.02"
+	$forcerefract 1
+	$bluramount 1
+	$translucent 1
+}
