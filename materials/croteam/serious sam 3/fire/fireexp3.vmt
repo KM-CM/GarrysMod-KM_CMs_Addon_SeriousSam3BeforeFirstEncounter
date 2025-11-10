@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	$basetexture "croteam/serious sam 3/particles/fire/fireexp3"
+	$translucent 1
+	$vertexalpha 1
+	$vertexcolor 1
+	$NOLOD 1
+}
