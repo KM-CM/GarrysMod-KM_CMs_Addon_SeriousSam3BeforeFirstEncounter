@@ -1,0 +1,23 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models\ss3\werebull\werebull"
+	"$bumpmap" "models\ss3\werebull\werebull_n"
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.03 0.03 0.03 ]" 
+	"$envmapcontrast" .50
+	"$normalmapalphaenvmapmask"	"1"
+	"$envmapsaturation" .35	
+
+	"$phong" "1"
+	"$phongboost" ".3"
+	"$phongexponent" "20"
+	"$phongalbedotint" "1"
+	"$phongfresnelranges" "[2.5 0 0]"
+	
+	$rimlight 1
+	$rimlightexponent       400
+	$rimlightboost          1	
+
+ 
+}
