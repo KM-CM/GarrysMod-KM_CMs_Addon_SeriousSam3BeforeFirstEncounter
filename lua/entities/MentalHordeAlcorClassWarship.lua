@@ -54,7 +54,7 @@ ENT.flCapacity = 20000
 ENT.tHatchesOpen = {} // Bone ID 1-10 -> true / nil
 ENT.tHatchTargets = {} // Bone ID 1-10 -> Vector
 
-Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombatTick", function( self, sched )
+Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
 	local pPhys = self:GetPhysicsObject()
@@ -64,7 +64,7 @@ end )
 function ENT:SelectSchedule( MyTable )
 	if IsValid( MyTable.Enemy ) then
 		MyTable.SetNPCState( self, NPC_STATE_COMBAT )
-		MyTable.SetSchedule( self, "MentalHordeAlcorClassWarshipCombatTick", MyTable )
+		MyTable.SetSchedule( self, "MentalHordeAlcorClassWarshipCombat", MyTable )
 	else
 		// MyTable.SetNPCState( self, NPC_STATE_ALERT )
 		// MyTable.SetSchedule( self, "Idle", MyTable )
