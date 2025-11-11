@@ -68,7 +68,7 @@ function ENT:Stand() end
 
 local EXPLOSION_RADIUS = 192
 
-Actor_RegisterSchedule( "MentalHordeBeHeadedKamikazeTick", function( self, sched )
+Actor_RegisterSchedule( "MentalHordeBeHeadedKamikazeCombat", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
 	self:SetNPCState( NPC_STATE_COMBAT )
@@ -95,7 +95,7 @@ end )
 function ENT:SelectSchedule( MyTable )
 	if IsValid( MyTable.Enemy ) then
 		MyTable.SetNPCState( self, NPC_STATE_COMBAT )
-		MyTable.SetSchedule( self, "MentalHordeBeHeadedKamikazeTick", MyTable )
+		MyTable.SetSchedule( self, "MentalHordeBeHeadedKamikazeCombat", MyTable )
 	else
 		MyTable.SetNPCState( self, NPC_STATE_ALERT )
 		MyTable.SetSchedule( self, "Idle", MyTable )
