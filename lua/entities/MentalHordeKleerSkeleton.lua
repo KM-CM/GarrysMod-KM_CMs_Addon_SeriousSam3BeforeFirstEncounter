@@ -124,7 +124,7 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched 
 	sched.tHit = tHit
 end )
 
-Actor_RegisterSchedule( "MentalHordeKleerSkeletonTick", function( self, sched )
+Actor_RegisterSchedule( "MentalHordeKleerSkeletonCombatTick", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
 	self:SetNPCState( NPC_STATE_COMBAT )
@@ -149,7 +149,7 @@ end )
 function ENT:SelectSchedule( MyTable )
 	if IsValid( MyTable.Enemy ) then
 		MyTable.SetNPCState( self, NPC_STATE_COMBAT )
-		MyTable.SetSchedule( self, "MentalHordeKleerSkeletonTick", MyTable )
+		MyTable.SetSchedule( self, "MentalHordeKleerSkeletonCombatTick", MyTable )
 	else
 		MyTable.SetNPCState( self, NPC_STATE_ALERT )
 		MyTable.SetSchedule( self, "Idle", MyTable )
