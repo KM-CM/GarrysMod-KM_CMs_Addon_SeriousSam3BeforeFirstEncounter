@@ -180,10 +180,9 @@ function ENT:Behaviour( MyTable )
 	local flLastHealth = MyTable.flLastHealth
 	if flLastHealth then
 		if flLastHealth > self:GetMaxHealth() * .5 && self:Health() <= self:GetMaxHealth() * .5 then
-			MyTable.AnimationSystemHalt( self, MyTable )
 			CEntity_EmitSound( self, "MentalHorde_KleerSkeleton_Wound" )
 			MyTable.flLastHealth = self:Health()
-			MyTable.PlaySequenceAndWait( self, self:LookupSequence "wound", 1 )
+			self:AddGestureSequence( self:LookupSequence "wound" )
 			return
 		end
 	end
