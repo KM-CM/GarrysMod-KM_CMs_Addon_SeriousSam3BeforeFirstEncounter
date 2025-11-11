@@ -156,6 +156,7 @@ function ENT:Behaviour( MyTable )
 		if flLastHealth > self:GetMaxHealth() * .5 && self:Health() <= self:GetMaxHealth() * .5 then
 			MyTable.AnimationSystemHalt( self, MyTable )
 			MyTable.PlaySequenceAndWait( self, self:LookupSequence( math.random( 1, 3 ) == 1 && "wound" || ( "wound" .. tostring( math.random( 2, 3 ) ) ) ), 1 )
+			return
 		end
 	end
 	MyTable.flLastHealth = self:Health()
