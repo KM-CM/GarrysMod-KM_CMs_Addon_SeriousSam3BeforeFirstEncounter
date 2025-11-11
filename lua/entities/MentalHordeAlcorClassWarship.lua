@@ -1,3 +1,16 @@
+// Hatch bones, a.k.a the warship's MASSIVE MOMMY MILKERS-
+// 1  -> SpawnSlot08
+// 2  -> SpawnSlot04
+// 3  -> SpawnSlot09
+// 4  -> SpawnSlot05
+// 5  -> SpawnSlot01
+// 6  -> SpawnSlot07
+// 7  -> SpawnSlot06
+// 8  -> SpawnSlot02
+// 9  -> SpawnSlot00
+// 10 -> SpawnSlot03
+// Which is which? No idea...
+
 AddCSLuaFile()
 DEFINE_BASECLASS "BaseActor"
 
@@ -28,22 +41,32 @@ ENT.bPhysics = true
 if !CLASS_MENTAL_HORDE then Add_NPC_Class "CLASS_MENTAL_HORDE" end
 ENT.iDefaultClass = CLASS_MENTAL_HORDE
 
-Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipTick", function( self, sched )
+ENT.bVisNot360 = false
+ENT.flVisionPitch = 180
+ENT.flVisionYaw = 180
+
+ENT.flTopSpeed = 32768
+ENT.flProwlSpeed = 21626
+ENT.flWalkSpeed = 10812
+
+Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombatTick", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
+	local pPhys = self:GetPhysicsObject()
+	if !IsValid( pPhys ) then self:Remove() return true end
 end )
 
 function ENT:SelectSchedule( MyTable )
 	if IsValid( MyTable.Enemy ) then
 		MyTable.SetNPCState( self, NPC_STATE_COMBAT )
-		MyTable.SetSchedule( self, "MentalHordeAlcorClassWarshipTick", MyTable )
+		MyTable.SetSchedule( self, "MentalHordeAlcorClassWarshipCombatTick", MyTable )
 	else
 		// MyTable.SetNPCState( self, NPC_STATE_ALERT )
 		// MyTable.SetSchedule( self, "Idle", MyTable )
 	end
 end
 
-ENT.vHullMins = Vector( -9725.2724609375, -8991.888671875, -851.29510498047 )
+ENT.vHullMins = Vector( -9725.2724609375, -8991.888671875, -256 )
 ENT.vHullMaxs = Vector( 4312.1313476563, 8830.90234375, 6716.767578125 )
 
 function ENT:Initialize()
