@@ -100,7 +100,7 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched 
 		start = v,
 		endpos = v + self:GetForward() * 32,
 		mask = MASK_SOLID,
-		mins = Vector( -32, -32, -32 ),
+		mins = Vector( -32, -32, -24 ),
 		maxs = Vector( 32, 32, 32 ),
 		filter = function( ent )
 			if ent == self || tHit[ ent ] then return end
@@ -137,7 +137,7 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonTick", function( self, sched )
 	local f = self.flLeapSpeed * .5 // TODO: This needs better calculations!!!
 	if self:Visible( enemy ) && v:DistToSqr( enemy:NearestPoint( v ) ) <= f * f then
 		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
-		if self:GetForward():Dot( d ) > .99 then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
+		if self:GetForward():Dot( d ) > .99984769515 then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
 		self.vDesAim = d
 	else
 		local goal = pPath:GetCurrentGoal()
