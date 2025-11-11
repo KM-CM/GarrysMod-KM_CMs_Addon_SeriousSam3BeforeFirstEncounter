@@ -49,6 +49,8 @@ ENT.flTopSpeed = 32768
 ENT.flProwlSpeed = 21626
 ENT.flWalkSpeed = 10812
 
+ENT.flCapacity = 20000
+
 Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombatTick", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
@@ -68,6 +70,9 @@ end
 
 ENT.vHullMins = Vector( -9725.2724609375, -8991.888671875, -256 )
 ENT.vHullMaxs = Vector( 4312.1313476563, 8830.90234375, 6716.767578125 )
+
+local table_insert = table.insert
+local math_random = math.random
 
 function ENT:Initialize()
 	self:SetModel "models/ss3_spaceship_alcor.mdl"
