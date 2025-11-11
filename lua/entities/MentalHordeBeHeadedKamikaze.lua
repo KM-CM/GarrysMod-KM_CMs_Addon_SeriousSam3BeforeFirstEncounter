@@ -210,7 +210,7 @@ function ENT:BlowUp()
 	pBloodSpray:SetColor( 0 )
 	util.Effect( "bloodspray", pBloodSpray )
 	util.Effect( "bloodspray", pBloodSpray )
-	util.BlastDamage( self, self, v, EXPLOSION_RADIUS, 1024 )
+	util.BlastDamage( self, self, v, EXPLOSION_RADIUS, 4096 )
 	self:Remove()
 end
 
