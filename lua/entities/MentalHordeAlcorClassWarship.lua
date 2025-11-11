@@ -51,6 +51,9 @@ ENT.flWalkSpeed = 10812
 
 ENT.flCapacity = 20000
 
+ENT.tHatchesOpen = {} // Bone ID 1-10 -> true / nil
+ENT.tHatchTargets = {} // Bone ID 1-10 -> Vector
+
 Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombatTick", function( self, sched )
 	local enemy = self.Enemy
 	if !IsValid( enemy ) then return true end
