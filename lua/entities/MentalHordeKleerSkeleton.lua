@@ -21,6 +21,16 @@ sound.Add {
 }
 
 sound.Add {
+	name = "MentalHorde_KleerSkeleton_Wound",
+	channel = CHAN_AUTO,
+	level = 100,
+	sound = {
+		"MentalHorde/KleerSkeleton/Wound/1.wav",
+		"MentalHorde/KleerSkeleton/Wound/2.wav"
+	}
+}
+
+sound.Add {
 	name = "MentalHorde_KleerSkeleton_Leap",
 	channel = CHAN_AUTO,
 	level = 100,
@@ -46,6 +56,8 @@ ENT.flTopSpeed = 400
 ENT.flProwlSpeed = ENT.flTopSpeed
 ENT.flWalkSpeed = ENT.flTopSpeed
 
+ENT.bCombatForgetLastHostile = true
+
 function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )
 	self.loco:SetDesiredSpeed( flSpeed )
 	local f = flSpeed * ACCELERATION_NORMAL
@@ -64,7 +76,7 @@ local CEntity_EmitSound = FindMetaTable( "Entity" ).EmitSound
 if !CLASS_MENTAL_HORDE then Add_NPC_Class "CLASS_MENTAL_HORDE" end
 ENT.iDefaultClass = CLASS_MENTAL_HORDE
 
-ENT.flLeapSpeed = 1024
+ENT.flLeapSpeed = 1280
 
 Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched )
 	local enemy = self.Enemy
@@ -95,13 +107,13 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched 
 			tHit[ ent ] = true
 			if IsValid( ent ) && self:Disposition( ent ) != D_LI then
 				local dmg = DamageInfo()
-				dmg:SetDamage( 1024 )
+				dmg:SetDamage( 768 )
 				dmg:SetDamageType( DMG_SLASH )
 				dmg:SetAttacker( self )
 				dmg:SetInflictor( self )
 				ent:TakeDamageInfo( dmg )
 				local dmg = DamageInfo()
-				dmg:SetDamage( 1024 )
+				dmg:SetDamage( 768 )
 				dmg:SetDamageType( DMG_CLUB )
 				dmg:SetAttacker( self )
 				dmg:SetInflictor( self )
@@ -162,7 +174,20 @@ function ENT:Think( ... )
 			if IsValid( p ) then p:SetMass( 85 ) end
 		end
 	end
-	return BaseClass.Think( self, ... )
+end
+
+function ENT:Behaviour( MyTable )
+	local flLastHealth = MyTable.flLastHealth
+	if flLastHealth then
+		if flLastHealth > self:GetMaxHealth() * .5 && self:Health() <= self:GetMaxHealth() * .5 then
+			MyTable.AnimationSystemHalt( self, MyTable )
+			CEntity_EmitSound( self, "MentalHorde_KleerSkeleton_Wound" )
+			MyTable.PlaySequenceAndWait( self, self:LookupSequence "wound", 1 )
+			return
+		end
+	end
+	MyTable.flLastHealth = self:Health()
+	BaseClass.Behaviour( self, MyTable )
 end
 
 function ENT:OnKilled( dmg )
