@@ -137,7 +137,7 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonCombat", function( self, sched 
 	local f = self.flLeapSpeed * .5 // TODO: This needs better calculations!!!
 	if self:Visible( enemy ) && v:DistToSqr( enemy:NearestPoint( v ) ) <= f * f then
 		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
-		if self:GetForward():Dot( d ) > .999  then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
+		if self:GetForward():Dot( d ) > .999 then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
 		self.vDesAim = d
 	else
 		local goal = pPath:GetCurrentGoal()
@@ -212,4 +212,3 @@ function ENT:OnKilled( dmg )
 	end
 	self:Remove()
 end
-
