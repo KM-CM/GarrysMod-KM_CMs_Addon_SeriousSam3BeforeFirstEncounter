@@ -72,7 +72,7 @@ function ENT:ShootLeft()
 	CEntity_EmitSound( self, "MentalHorde_ScrapJackRocketeer_Fire" )
 	local at = self:LookupAttachment "Left_Cannon"
 	ParticleEffectAttach( "SS3_EnemyRL_Shot", PATTACH_POINT_FOLLOW, self, at )
-	local pProjectile = self:CreateProjectile "MentalHordeScrapJackRocketeerRocket"
+	local pProjectile = self:CreateProjectile "MentalHordeRocketLarge"
 	if !IsValid( pProjectile ) then return end
 	pProjectile:SetPos( self:GetAttachment( at ).Pos )
 	pProjectile:SetAngles( self:GetAimVector():Angle() )
@@ -82,7 +82,7 @@ function ENT:ShootRight()
 	CEntity_EmitSound( self, "MentalHorde_ScrapJackRocketeer_Fire" )
 	local at = self:LookupAttachment "Right_Cannon"
 	ParticleEffectAttach( "SS3_EnemyRL_Shot", PATTACH_POINT_FOLLOW, self, at )
-	local pProjectile = self:CreateProjectile "MentalHordeScrapJackRocketeerRocket"
+	local pProjectile = self:CreateProjectile "MentalHordeRocketLarge"
 	if !IsValid( pProjectile ) then return end
 	pProjectile:SetPos( self:GetAttachment( at ).Pos )
 	pProjectile:SetAngles( self:GetAimVector():Angle() )
