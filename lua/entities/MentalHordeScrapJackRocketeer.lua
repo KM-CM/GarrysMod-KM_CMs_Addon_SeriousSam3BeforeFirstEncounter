@@ -158,6 +158,37 @@ end
 
 function ENT:OnKilled( dmg )
 	if BaseClass.OnKilled( self, dmg ) then return end
+	local aAngles = self:GetAngles()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/legs.mdl"
+	pGib:SetPos( self:GetPos() + self:GetUp() * 50 )
+	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
+	pGib:Spawn()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/arm.mdl"
+	pGib:SetPos( self:GetBonePosition( 20 ) + self:GetRight() * -30 )
+	pGib:SetAngles( aAngles + Angle( 0, 180, -40 ) )
+	pGib:Spawn()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/arm.mdl"
+	pGib:SetPos( self:GetBonePosition( 16 ) + self:GetRight() * 30 )
+	pGib:SetAngles( aAngles + Angle( -30, 0, -40 ) )
+	pGib:Spawn()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/head.mdl"
+	pGib:SetPos( self:GetBonePosition( 24 ) )
+	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
+	pGib:Spawn()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/skin1.mdl"
+	pGib:SetPos( self:GetBonePosition( 11 ) + self:GetRight() * 10 )
+	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
+	pGib:Spawn()
+	local pGib = ents.Create "prop_physics"
+	pGib:SetModel "models/ss3_scrapjack_gibs/skin2.mdl"
+	pGib:SetPos( self:GetBonePosition( 11 ) + self:GetRight() * 10 + self:GetForward() * 20 )
+	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
+	pGib:Spawn()
 	self:Remove()
 end
 
