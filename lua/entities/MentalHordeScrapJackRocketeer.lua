@@ -102,12 +102,12 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerCombat", function( self, s
 		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
 		self.vDesAim = d
 		if self:GetForward():Dot( d ) > math.cos( math.rad( self.flTurnRate ) ) then
-			self:SetSchedule( math.Rand( 0, math.Remap( self:Health(), 0, self:GetMaxHealth(), 1.5, 12 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootRage" ||
-			( math.Rand( 0, math.Remap( self:Health(), 0, self:GetMaxHealth(), 12, 1.5 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootWeak" ||
+			self:SetSchedule( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1.5, 12 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootRage" ||
+			( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .66, self:GetMaxHealth(), 12, 2 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootWeak" ||
 			( math.random( 2 ) == 1 && "MentalHordeScrapJackRocketeerShootPairs" || "MentalHordeScrapJackRocketeerShootAuto" ) ) )
 		end
 		return
-	elseif self:Visible( enemy ) && math.Rand( 0, math.Remap( self:Health(), 0, self:GetMaxHealth(), 1, 10000 ) * FrameTime() ) <= 1 then sched.bBeganAttack = true return end
+	elseif self:Visible( enemy ) && math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1, 10000 ) * FrameTime() ) <= 1 then sched.bBeganAttack = true return end
 	local goal = pPath:GetCurrentGoal()
 	local v = self:GetPos()
 	if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
