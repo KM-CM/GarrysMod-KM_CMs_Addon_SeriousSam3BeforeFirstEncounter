@@ -68,7 +68,7 @@ function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )
 	if f <= 12 then self:PromoteSequence "idle" else
 		self:PromoteSequence( "run", GetVelocity( self ):Length() / self:GetSequenceGroundSpeed( self:LookupSequence "run" ) )
 	end
-	self:HandleJumpingAlongPath( pPath, tFilter )
+	self:HandleJumpingAlongPath( pPath, flSpeed, tFilter )
 end
 
 local CEntity_EmitSound = FindMetaTable( "Entity" ).EmitSound

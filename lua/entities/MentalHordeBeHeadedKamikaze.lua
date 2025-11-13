@@ -61,7 +61,7 @@ function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )
 	if f <= 12 then self:PromoteSequence "idle" else
 		self:PromoteSequence( "attack", GetVelocity( self ):Length() / self:GetSequenceGroundSpeed( self:LookupSequence "attack" ) * .5 )
 	end
-	self:HandleJumpingAlongPath( pPath, tFilter )
+	self:HandleJumpingAlongPath( pPath, flSpeed, tFilter )
 end
 
 function ENT:Stand() end
