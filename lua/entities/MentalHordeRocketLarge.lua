@@ -32,6 +32,10 @@ ENT.EXPLOSION_flDamage = 2048
 ENT.EXPLOSION_flRadius = 96
 
 ENT.__PROJECTILE_ROCKET__ = true
+// Canonical speed of 25.5 meters per second, which is the launch velocity of
+// the rocket launcher and the Major Bio-mechanoid. But Scrapjack Rocketeer
+// missiles are way faster like this. Not only that, this value is more
+// realistic for unguided rockets, who aren't actually that slow in real life
 ENT.ROCKET_flSpeed = 2048
 
 local CEntity_GetPhysicsObject = CEntity.GetPhysicsObject
