@@ -52,7 +52,7 @@ ENT.flWalkSpeed = 10812
 ENT.flCapacity = 20000
 
 ENT.tHatchesOpen = {} // Bone ID 1-10 -> true / nil
-ENT.tHatchNextDeploy = { // Bone ID 1-10 -> Time
+ENT.tNextHatchDeploy = { // Bone ID 1-10 -> Time
 	[ 1 ] = 0,
 	[ 2 ] = 0,
 	[ 3 ] = 0,
@@ -88,6 +88,11 @@ Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sc
 					iCurrent = iCurrent + 1
 				end
 			end
+		end
+		local tNextHatchDeploy = self.tNextHatchDeploy
+		for i = 1, 10 do
+			if !tHatchesOpen[ i ] || CurTime() <= tNextHatchDeploy[ i ] then continue end
+			local vBone = self:GetBonePosition( i )
 		end
 	else self.tHatchesOpen = {} end
 end )
