@@ -16,7 +16,7 @@ scripted_ents.Register( ENT, "MentalHordeBeHeadedKamikaze" )
 
 ENT.CATEGORIZE = {
 	MentalHorde = true,
-	BeHeadedKamikaze = true,
+	BeHeaded = true,
 	Kamikaze = true
 }
 
@@ -218,3 +218,4 @@ function ENT:OnKilled( dmg )
 	if BaseClass.OnKilled( self, dmg ) || self.bBlowUp then return end
 	self:BlowUp()
 end
+
