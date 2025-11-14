@@ -127,7 +127,7 @@ function ENT:Think( ... )
 	local vHullMins, vHullMaxs = self.vHullMins, self.vHullMaxs
 	local vHullMinsCurrent, vHullMaxsCurrent = self:GetCollisionBounds()
 	if vHullMaxsCurrent != vHullMins || vHullMaxsCurrent != vHullMaxs then
-		self:SetCollisionBounds( self.vHullMins, self.vHullMaxs )
+		self:SetCollisionBounds( vHullMins, vHullMaxs )
 		if !IsValid( self:GetParent() ) && self:PhysicsInitShadow( false, false ) then
 			local p = self:GetPhysicsObject()
 			if IsValid( p ) then p:SetMass( 85 ) end
@@ -218,4 +218,3 @@ function ENT:OnKilled( dmg )
 	if BaseClass.OnKilled( self, dmg ) || self.bBlowUp then return end
 	self:BlowUp()
 end
-
