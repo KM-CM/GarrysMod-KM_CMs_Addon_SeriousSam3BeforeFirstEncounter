@@ -1,369 +1,91 @@
-// TODO: Make a good timed laughing animation
-
 AddCSLuaFile()
-DEFINE_BASECLASS "BaseActor"
+DEFINE_BASECLASS "BaseProjectile"
 
-scripted_ents.Register( ENT, "MentalHordeScrapJackRocketeer" )
-
-ENT.CATEGORIZE = {
-	MentalHorde = true,
-	ScrapJack = true,
-	Rocketeer = true
-}
-
-sound.Add {
-	name = "MentalHorde_ScrapJackRocketeer_Fire",
-	channel = CHAN_AUTO,
-	level = 150,
-	sound = {
-		"MentalHorde/ScrapJackRocketeer/Fire/1.wav",
-		"MentalHorde/ScrapJackRocketeer/Fire/2.wav"
-	}
-}
-
-sound.Add {
-	name = "MentalHorde_ScrapJackRocketeer_Laugh",
-	channel = CHAN_STATIC,
-	level = 110,
-	sound = "MentalHorde/ScrapJackRocketeer/Laugh.wav"
-}
-
-list.Set( "NPC", "MentalHordeScrapJackRocketeer", {
-	Name = "#MentalHordeScrapJackRocketeer",
-	Class = "MentalHordeScrapJackRocketeer",
-	Category = "#MentalHorde"
-} )
+scripted_ents.Register( ENT, "MentalHordeRocketLarge" )
 
 if !SERVER then return end
 
-ENT.HAS_MELEE_ATTACK = true
-ENT.HAS_RANGE_ATTACK = true
-
-ENT.flIdleStandTimeMin = 0
-ENT.flIdleStandTimeMax = 0
-
-ENT.flTopSpeed = 65
-ENT.flProwlSpeed = ENT.flTopSpeed
-ENT.flWalkSpeed = ENT.flTopSpeed
-
-function ENT:GetShootPos() return self:GetPos() + self:OBBCenter() end
-
-function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )
-	self.loco:SetDesiredSpeed( flSpeed )
-	local f = flSpeed * ACCELERATION_NORMAL
-	self.loco:SetAcceleration( f )
-	self.loco:SetDeceleration( f )
-	self.loco:SetJumpHeight( 128 )
-	local f = GetVelocity( self ):Length()
-	if f <= 12 then self:PromoteSequence "idle" else
-		self:PromoteSequence( "walk", GetVelocity( self ):Length() / self:GetSequenceGroundSpeed( self:LookupSequence "walk" ) )
-	end
-	self:HandleJumpingAlongPath( pPath, flSpeed, tFilter )
-end
-
-function ENT:Stand() end
-
-ENT.flTurnRate = 22.5
-
-local CEntity_EmitSound = FindMetaTable( "Entity" ).EmitSound
+local SOLID_VPHYSICS = SOLID_VPHYSICS
 local ParticleEffectAttach = ParticleEffectAttach
-local PATTACH_POINT_FOLLOW = PATTACH_POINT_FOLLOW
+local PATTACH_ABSORIGIN_FOLLOW = PATTACH_ABSORIGIN_FOLLOW
+local util_SpriteTrail = util.SpriteTrail
 
-function ENT:ShootLeft()
-	CEntity_EmitSound( self, "MentalHorde_ScrapJackRocketeer_Fire" )
-	local at = self:LookupAttachment "Left_Cannon"
-	ParticleEffectAttach( "SS3_EnemyRL_Shot", PATTACH_POINT_FOLLOW, self, at )
-	local pProjectile = self:CreateProjectile "MentalHordeRocketLarge"
-	if !IsValid( pProjectile ) then return end
-	pProjectile:SetPos( self:GetAttachment( at ).Pos )
-	pProjectile:SetAngles( self:GetAimVector():Angle() )
-	pProjectile:Spawn()
-end
-function ENT:ShootRight()
-	CEntity_EmitSound( self, "MentalHorde_ScrapJackRocketeer_Fire" )
-	local at = self:LookupAttachment "Right_Cannon"
-	ParticleEffectAttach( "SS3_EnemyRL_Shot", PATTACH_POINT_FOLLOW, self, at )
-	local pProjectile = self:CreateProjectile "MentalHordeRocketLarge"
-	if !IsValid( pProjectile ) then return end
-	pProjectile:SetPos( self:GetAttachment( at ).Pos )
-	pProjectile:SetAngles( self:GetAimVector():Angle() )
-	pProjectile:Spawn()
-end
-
-Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerCombat", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then return true end
-	local enemy, trueenemy = self:SetupEnemy( enemy )
-	local pPath = sched.pPath
-	if !pPath then pPath = Path "Follow" sched.pPath = pPath end
-	self:ComputeFlankPath( pPath, enemy )
-	self:MoveAlongPath( pPath, self.flTopSpeed )
-	if sched.bBeganAttack then
-		if !self:Visible( enemy ) then sched.bBeganAttack = nil return end
-		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
-		self.vDesAim = d
-		if self:GetForward():Dot( d ) > math.cos( math.rad( self.flTurnRate ) ) then
-			self:SetSchedule( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1.5, 12 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootRage" ||
-			( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .66, self:GetMaxHealth(), 12, 2 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootWeak" ||
-			( math.random( 2 ) == 1 && "MentalHordeScrapJackRocketeerShootPairs" || "MentalHordeScrapJackRocketeerShootAuto" ) ) )
-		end
-		return
-	elseif self:Visible( enemy ) && math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1, 10000 ) * FrameTime() ) <= 1 then sched.bBeganAttack = true return end
-	local goal = pPath:GetCurrentGoal()
-	local v = self:GetPos()
-	if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
-end )
-
-if !CLASS_MENTAL_HORDE then Add_NPC_Class "CLASS_MENTAL_HORDE" end
-ENT.iDefaultClass = CLASS_MENTAL_HORDE
-
-ENT.vHullMins = Vector( -50, -50, 0 )
-ENT.vHullMaxs = Vector( 50, 50, 128 )
-
-ENT.bCombatForgetLastHostile = true
+local CEntity = FindMetaTable "Entity"
+local CEntity_SetModel = CEntity.SetModel
+local CEntity_PhysicsInit = CEntity.PhysicsInit
+local CEntity_SetHealth = CEntity.SetHealth
+local CEntity_SetMaxHealth = CEntity.SetMaxHealth
 
 function ENT:Initialize()
-	self:SetModel "models/ss3_scrapjack.mdl"
-	self:SetHealth( 16384 )
-	self:SetMaxHealth( 16384 )
-	self:SetBloodColor( -1 )
-	BaseClass.Initialize( self )
+	CEntity_SetModel( self, "models/ss3_bbiomechrocket.mdl" )
+	CEntity_PhysicsInit( self, SOLID_VPHYSICS )
+	CEntity_SetHealth( self, 128 )
+	CEntity_SetMaxHealth( self, 128 )
+	ParticleEffectAttach( "SS3_BiomechRocketFlare", PATTACH_ABSORIGIN_FOLLOW, self, 1 )
+	ParticleEffectAttach( "SS3_BiomechRocket_SmokeTrail", PATTACH_ABSORIGIN_FOLLOW, self, 1 )
+ 	ParticleEffectAttach( "SS3_BiomechanoidRocketTrail", PATTACH_ABSORIGIN_FOLLOW, self, 1 )
+	util_SpriteTrail( self, 0, Color( 255, 255, 255, 255 ), false, 20, 20, 1, .1125, "trails/ss3_smoke_trail.vmt" )
 end
 
-local ai_disabled = GetConVar "ai_disabled"
+ENT.__PROJECTILE_EXPLOSION__ = true
+ENT.EXPLOSION_flDamage = 2048
+ENT.EXPLOSION_flRadius = 96
 
-function ENT:Think( ... )
-	local vHullMins, vHullMaxs = self.vHullMins, self.vHullMaxs
-	local vHullMinsCurrent, vHullMaxsCurrent = self:GetCollisionBounds()
-	if vHullMaxsCurrent != vHullMins || vHullMaxsCurrent != vHullMaxs then
-		self:SetCollisionBounds( self.vHullMins, self.vHullMaxs )
-		if !IsValid( self:GetParent() ) && self:PhysicsInitShadow( false, false ) then
-			local p = self:GetPhysicsObject()
-			if IsValid( p ) then p:SetMass( 85 ) end
-		end
-	end
-	return v
+ENT.__PROJECTILE_ROCKET__ = true
+ENT.ROCKET_flSpeed = 4096
+
+local CEntity_GetPhysicsObject = CEntity.GetPhysicsObject
+local CEntity_GetForward = CEntity.GetForward
+local CEntity_GetTable = CEntity.GetTable
+local CEntity_NextThink = CEntity.NextThink
+local CurTime = CurTime
+
+function ENT:Think()
+	local pPhys = CEntity_GetPhysicsObject( self )
+	if !IsValid( pPhys ) then return end
+	pPhys:SetVelocity( CEntity_GetForward( self ) * CEntity_GetTable( self ).ROCKET_flSpeed )
+	CEntity_NextThink( self, CurTime() )
+	return true
 end
 
-function ENT:Behaviour( MyTable )
-	local flLastHealth = MyTable.flLastHealth
-	if flLastHealth then
-		if flLastHealth > self:GetMaxHealth() * .5 && self:Health() <= self:GetMaxHealth() * .5 then
-			MyTable.AnimationSystemHalt( self, MyTable )
-			MyTable.flLastHealth = self:Health()
-			MyTable.PlaySequenceAndWait( self, self:LookupSequence "wound", 1 )
-			return
-		end
-	end
-	MyTable.flLastHealth = self:Health()
-	BaseClass.Behaviour( self, MyTable )
+local util_BlastDamage = util.BlastDamage
+local CEntity_GetOwner = CEntity.GetOwner
+local IsValid = IsValid
+local ParticleEffect = ParticleEffect
+
+local CEntity_GetPos = CEntity.GetPos
+local CEntity_OBBCenter = CEntity.OBBCenter
+local CEntity_EmitSound = CEntity.EmitSound
+local CEntity_GetAngles = CEntity.GetAngles
+local CEntity_EmitSound = CEntity.EmitSound
+local CEntity_WaterLevel = CEntity.WaterLevel
+local CEntity_Remove = CEntity.Remove
+
+function ENT:Detonate( MyTable )
+	MyTable = MyTable || CEntity_GetTable( self )
+	if MyTable.bDetonated then return end
+	local vPos = CEntity_GetPos( self )
+	local v = vPos + CEntity_OBBCenter( self )
+	local pOwner = CEntity_GetOwner( self )
+	util_BlastDamage( self, IsValid( pOwner ) && pOwner || self, v, MyTable.EXPLOSION_flRadius, MyTable.EXPLOSION_flDamage )
+	ParticleEffect( "SS3_RocketExplosion", vPos, CEntity_GetAngles( self ), nil )
+	// Not using the custom sound because it SUCKS!
+	CEntity_EmitSound( self, CEntity_WaterLevel( self ) < 3 && "BaseExplosionEffect.Water" || "BaseExplosionEffect.Sound" ) 
+	MyTable.bDetonated = true
+	CEntity_Remove( self )
 end
 
-function ENT:OnKilled( dmg )
-	if BaseClass.OnKilled( self, dmg ) then return end
-	local aAngles = self:GetAngles()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/legs.mdl"
-	pGib:SetPos( self:GetPos() + self:GetUp() * 32 )
-	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
-	pGib:Spawn()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/arm.mdl"
-	pGib:SetPos( self:GetBonePosition( 20 ) + self:GetRight() * -30 - self:GetUp() * 50 )
-	pGib:SetAngles( aAngles + Angle( 0, 180, -40 ) )
-	pGib:Spawn()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/arm.mdl"
-	pGib:SetPos( self:GetBonePosition( 16 ) + self:GetRight() * 30 - self:GetUp() * 50 )
-	pGib:SetAngles( aAngles + Angle( -30, 0, -40 ) )
-	pGib:Spawn()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/head.mdl"
-	pGib:SetPos( self:GetBonePosition( 24 ) + self:GetUp() * 96 )
-	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
-	pGib:Spawn()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/skin1.mdl"
-	pGib:SetPos( self:GetBonePosition( 11 ) + self:GetRight() * 10 + self:GetUp() * 12 )
-	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
-	pGib:Spawn()
-	local pGib = ents.Create "prop_physics"
-	pGib:SetModel "models/ss3_scrapjack_gibs/skin2.mdl"
-	pGib:SetPos( self:GetBonePosition( 11 ) + self:GetRight() * 10 + self:GetForward() * 20 + self:GetUp() * 12 )
-	pGib:SetAngles( aAngles + Angle( 0, 180, 0 ) )
-	pGib:Spawn()
-	self:Remove()
+function ENT:PhysicsCollide()
+	local MyTable = CEntity_GetTable( self )
+	MyTable.Detonate( self, MyTable )
 end
 
-function ENT:SelectSchedule( MyTable )
-	if IsValid( MyTable.Enemy ) then
-		MyTable.SetNPCState( self, NPC_STATE_COMBAT )
-		MyTable.SetSchedule( self, "MentalHordeScrapJackRocketeerCombat", MyTable )
-	else
-		MyTable.SetNPCState( self, NPC_STATE_ALERT )
-		MyTable.SetSchedule( self, "Idle", MyTable )
-	end
+local CEntity_Health = CEntity.Health
+
+function ENT:OnTakeDamage( dDamage )
+	local MyTable = CEntity_GetTable( self )
+	if MyTable.bDead then return 0 end
+	local f = CEntity_Health( self ) - dDamage:GetDamage()
+	CEntity_SetHealth( self, f )
+	if f <= 0 then MyTable.bDead = true MyTable.Detonate( self, MyTable ) return 0 end
 end
-
-Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootWeak", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then if sched.flEndTime && CurTime() > sched.flEndTime then return true else return end end
-	local enemy, trueenemy = self:SetupEnemy( enemy )
-	self:SelectAim( enemy, self:GetShootPos(), 1020, 96, 24 )
-	if !sched.flEndTime then
-		local s = self:LookupSequence "fire22"
-		self:AddGestureSequence( s )
-		sched.flEndTime = CurTime() + self:SequenceDuration( s )
-		timer.Simple( .66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootWeak" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 2.2, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootWeak" then return end
-			self:ShootRight()
-		end )
-	end
-	if CurTime() > sched.flEndTime then return true end
-end )
-
-Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootAuto", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then if sched.flEndTime && CurTime() > sched.flEndTime then return true else return end end
-	local enemy, trueenemy = self:SetupEnemy( enemy )
-	self:SelectAim( enemy, self:GetShootPos(), 1020, 96, 24 )
-	if !sched.flEndTime then
-		local s = self:LookupSequence "fire33"
-		self:AddGestureSequence( s )
-		sched.flEndTime = CurTime() + self:SequenceDuration( s )
-		timer.Simple( 1.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 1.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 2, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 2.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 2.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 3, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			self:ShootLeft()
-		end )
-	end
-	if CurTime() > sched.flEndTime then return true end
-end )
-
-Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootPairs", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then if sched.flEndTime && CurTime() > sched.flEndTime then return true else return end end
-	local enemy, trueenemy = self:SetupEnemy( enemy )
-	self:SelectAim( enemy, self:GetShootPos(), 1020, 96, 24 )
-	if !sched.flEndTime then
-		local s = self:LookupSequence "fire23"
-		self:AddGestureSequence( s )
-		sched.flEndTime = CurTime() + self:SequenceDuration( s )
-		timer.Simple( 1.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			self:ShootLeft()
-			self:ShootRight()
-		end )
-		timer.Simple( 2, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			self:ShootLeft()
-			self:ShootRight()
-		end )
-		timer.Simple( 2.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			self:ShootLeft()
-			self:ShootRight()
-		end )
-	end
-	if CurTime() > sched.flEndTime then return true end
-end )
-
-Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootRage", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then if sched.flEndTime && CurTime() > sched.flEndTime then return true else return end end
-	local enemy, trueenemy = self:SetupEnemy( enemy )
-	self:SelectAim( enemy, self:GetShootPos(), 1020, 96, 24 )
-	local s = self:LookupSequence "fire rage"
-	if !sched.flEndTime then
-		self:AddGestureSequence( s )
-		sched.flEndTime = CurTime() + self:SequenceDuration( s )
-		timer.Simple( 1.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 1.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 2, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 2.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 2.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 3, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 3.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 3.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 4, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 4.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 4.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 5, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 5.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 5.66, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-		timer.Simple( 6, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootRight()
-		end )
-		timer.Simple( 6.33, function()
-			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			self:ShootLeft()
-		end )
-	end
-	if CurTime() > sched.flEndTime then return true end
-end )
