@@ -32,7 +32,7 @@ ENT.EXPLOSION_flDamage = 2048
 ENT.EXPLOSION_flRadius = 96
 
 ENT.__PROJECTILE_ROCKET__ = true
-ENT.ROCKET_flSpeed = 2048
+ENT.ROCKET_flSpeed = 4096
 
 local CEntity_GetPhysicsObject = CEntity.GetPhysicsObject
 local CEntity_GetForward = CEntity.GetForward
@@ -89,4 +89,3 @@ function ENT:OnTakeDamage( dDamage )
 	CEntity_SetHealth( self, f )
 	if f <= 0 then MyTable.bDead = true MyTable.Detonate( self, MyTable ) return 0 end
 end
-
