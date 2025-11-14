@@ -7,7 +7,8 @@ scripted_ents.Register( ENT, "MentalHordeScrapJackRocketeer" )
 
 ENT.CATEGORIZE = {
 	MentalHorde = true,
-	ScrapJackRocketeer = true
+	ScrapJack = true,
+	Rocketeer = true
 }
 
 sound.Add {
@@ -215,12 +216,10 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootWeak", function( self
 		sched.flEndTime = CurTime() + self:SequenceDuration( s )
 		timer.Simple( .66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootWeak" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 2.2, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootWeak" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 	end
@@ -238,32 +237,26 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootAuto", function( self
 		sched.flEndTime = CurTime() + self:SequenceDuration( s )
 		timer.Simple( 1.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 1.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 2, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 2.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 2.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 3, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootAuto" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 	end
@@ -281,19 +274,16 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootPairs", function( sel
 		sched.flEndTime = CurTime() + self:SequenceDuration( s )
 		timer.Simple( 1.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 			self:ShootRight()
 		end )
 		timer.Simple( 2, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 			self:ShootRight()
 		end )
 		timer.Simple( 2.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootPairs" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 			self:ShootRight()
 		end )
@@ -312,82 +302,66 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerShootRage", function( self
 		sched.flEndTime = CurTime() + self:SequenceDuration( s )
 		timer.Simple( 1.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 1.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 2, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 2.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 2.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 3, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 3.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 3.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 4, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 4.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 4.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 5, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 5.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 5.66, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 		timer.Simple( 6, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootRight()
 		end )
 		timer.Simple( 6.33, function()
 			if !IsValid( self ) || !self.Schedule || self.Schedule.m_sName != "MentalHordeScrapJackRocketeerShootRage" then return end
-			if !IsValid( self.Enemy ) then return end
 			self:ShootLeft()
 		end )
 	end
