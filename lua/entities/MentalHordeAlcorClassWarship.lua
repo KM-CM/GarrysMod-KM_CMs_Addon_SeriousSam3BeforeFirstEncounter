@@ -1,4 +1,4 @@
-// Hatch bones, a.k.a the warship's MASSIVE MOMMY MILKERS-
+// Deployment hatch bones, a.k.a the warship's MASSIVE MOMMY MILKERS-
 // 1  -> SpawnSlot08
 // 2  -> SpawnSlot04
 // 3  -> SpawnSlot09
@@ -52,13 +52,44 @@ ENT.flWalkSpeed = 10812
 ENT.flCapacity = 20000
 
 ENT.tHatchesOpen = {} // Bone ID 1-10 -> true / nil
+ENT.tHatchNextDeploy = { // Bone ID 1-10 -> Time
+	[ 1 ] = 0,
+	[ 2 ] = 0,
+	[ 3 ] = 0,
+	[ 4 ] = 0,
+	[ 5 ] = 0,
+	[ 6 ] = 0,
+	[ 7 ] = 0,
+	[ 8 ] = 0,
+	[ 9 ] = 0,
+	[ 10 ] = 0
+}
 ENT.tHatchTargets = {} // Bone ID 1-10 -> Vector
 
 Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sched )
-	local enemy = self.Enemy
-	if !IsValid( enemy ) then return true end
+	local pEnemy = self.Enemy
+	if !IsValid( pEnemy ) then return true end
 	local pPhys = self:GetPhysicsObject()
 	if !IsValid( pPhys ) then self:Remove() return true end
+	local pEnemy, pTrueEnemy = self:SetupEnemy( pEnemy )
+	if ( pEnemy:GetPos() + pEnemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized():Dot( Vector( 0, 0, -1 ) ) > 0 then
+		local iHatches
+		local flRatio = self:Health() / self:GetMaxHealth()
+		if flRatio <= .25 then iHatches = 10
+		else iHatches = math.Round( Lerp( ( flRatio - .25 ) / .75, 10, 1 ) ) end
+		local tHatchesOpen = self.tHatchesOpen
+		if table.Count( tHatchesOpen ) != iHatches then
+			table.Empty( tHatchesOpen )
+			local iCurrent = 0
+			while iCurrent < iHatches do
+				local iHatch = math.random( 1, 10 )
+				if !tHatchesOpen[ iHatch ] then
+					tHatchesOpen[ iHatch ] = true
+					iCurrent = iCurrent + 1
+				end
+			end
+		end
+	else self.tHatchesOpen = {} end
 end )
 
 function ENT:SelectSchedule( MyTable )
