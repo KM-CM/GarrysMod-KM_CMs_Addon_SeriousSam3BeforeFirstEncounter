@@ -52,19 +52,8 @@ ENT.flWalkSpeed = 10812
 ENT.flCapacity = 20000
 
 ENT.tHatchesOpen = {} // Bone ID 1-10 -> true / nil
-ENT.tNextHatchDeploy = { // Bone ID 1-10 -> Time
-	[ 1 ] = 0,
-	[ 2 ] = 0,
-	[ 3 ] = 0,
-	[ 4 ] = 0,
-	[ 5 ] = 0,
-	[ 6 ] = 0,
-	[ 7 ] = 0,
-	[ 8 ] = 0,
-	[ 9 ] = 0,
-	[ 10 ] = 0
-}
-ENT.tHatchTargets = {} // Bone ID 1-10 -> Vector
+ENT.tNextHatchDeploy = {} // Bone ID 1-10 -> Time / nil
+ENT.tHatchTargets = {} // Bone ID 1-10 -> { flVerticalOffset, flHorizontalOffset }
 
 Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sched )
 	local pEnemy = self.Enemy
@@ -72,12 +61,13 @@ Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sc
 	local pPhys = self:GetPhysicsObject()
 	if !IsValid( pPhys ) then self:Remove() return true end
 	local pEnemy, pTrueEnemy = self:SetupEnemy( pEnemy )
-	if ( pEnemy:GetPos() + pEnemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized():Dot( Vector( 0, 0, -1 ) ) > 0 then
+	if self.flCapacity > 0 && ( pEnemy:GetPos() + pEnemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized():Dot( Vector( 0, 0, -1 ) ) > 0 then
 		local iHatches
 		local flRatio = self:Health() / self:GetMaxHealth()
 		if flRatio <= .25 then iHatches = 10
 		else iHatches = math.Round( Lerp( ( flRatio - .25 ) / .75, 10, 1 ) ) end
 		local tHatchesOpen = self.tHatchesOpen
+		local tNextHatchDeploy = self.tNextHatchDeploy
 		if table.Count( tHatchesOpen ) != iHatches then
 			table.Empty( tHatchesOpen )
 			local iCurrent = 0
@@ -86,13 +76,36 @@ Actor_RegisterSchedule( "MentalHordeAlcorClassWarshipCombat", function( self, sc
 				if !tHatchesOpen[ iHatch ] then
 					tHatchesOpen[ iHatch ] = true
 					iCurrent = iCurrent + 1
+					if CurTime() > ( tNextHatchDeploy[ iHatch ] || 0 ) then
+						tNextHatchDeploy[ iHatch ] = CurTime() + math.Rand( 0, 30 )
+					end
 				end
 			end
 		end
-		local tNextHatchDeploy = self.tNextHatchDeploy
-		for i = 1, 10 do
-			if !tHatchesOpen[ i ] || CurTime() <= tNextHatchDeploy[ i ] then continue end
+		local tHatchTargets = self.tHatchTargets
+		local tSpawn = { "MentalHordeBeHeadedKamikaze", "MentalHordeBeHeadedRocketeer" }
+		local iSpawnLength = #tSpawn
+		for _, i in RandomPairs { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } do
+			if self.flCapacity <= 0 then break end
+			if !tHatchesOpen[ i ] || CurTime() <= ( tNextHatchDeploy[ i ] || 0 ) then continue end
 			local vBone = self:GetBonePosition( i )
+			local tOffset = tHatchTargets[ i ]
+			if !tOffset then tOffset = { math.Rand( -1, 1 ), math.Rand( -1, 1 ) } tHatchTargets[ i ] = tOffset end
+			local dTarget = -self:GetUp() + self:GetForward() * tOffset[ 1 ] + self:GetRight() * tOffset[ 2 ]
+			dTarget:Normalize()
+			local tr = util.TraceLine {
+				start = vBone,
+				endpos = vBone + dTarget * 999999,
+				mask = MASK_SOLID,
+				filter = self
+			}
+			tNextHatchDeploy[ i ] = CurTime() + 30
+			local pEntity = self:CreateActor( tSpawn[ math.random( 1, iSpawnLength ) ] )
+			if !IsValid( pEntity ) then continue end
+			pEntity:SetPos( tr.HitPos )
+			pEntity:SetAngles( Angle( 0, math.Rand( 0, 360 ), 0 ) )
+			pEntity:Spawn()
+			self.flCapacity = self.flCapacity - 1
 		end
 	else self.tHatchesOpen = {} end
 end )
