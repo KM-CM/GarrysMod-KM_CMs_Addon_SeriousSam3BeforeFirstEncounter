@@ -118,7 +118,7 @@ function ENT:Behaviour( MyTable )
 		if CurTime() > MyTable.flLastShot then
 			self:FireBullets {
 				Src = self:GetShootPos(),
-				Dir = self:GetAimVector(),
+				Dir = self.vDesAim,
 				Tracer = 1,
 				Spread = Vector( .02, .02 ),
 				Damage = 8 // I know this is ridiculous, but, HAVE YOU SEEN HOW FAST THESE THINGS SHOOT?!
