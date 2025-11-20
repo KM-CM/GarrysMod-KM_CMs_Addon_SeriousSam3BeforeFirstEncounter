@@ -1,4 +1,4 @@
-// Deployment hatch bones, a.k.a the warship's MASSIVE MOMMY MILKERS-
+// Deployment hatch bones
 // 1  -> SpawnSlot08
 // 2  -> SpawnSlot04
 // 3  -> SpawnSlot09
@@ -171,8 +171,9 @@ end
 
 // TODO: Find a realistic size! 6.3 is too huge, I've played Serious Sam 3,
 // it's way smaller than this model x6.3 here... sticking with 4.725 for now!
-ENT.vHullMins = Vector( -1543.693970, -1427.283936, -135.126205 )
-ENT.vHullMaxs = Vector( 684.465271, 1401.730469, 1066.153564 )
+ENT.vHullMins = Vector( -7293.954102, -6743.916504, -638.471313 )
+
+ENT.vHullMaxs = Vector( 3234.098389, 6623.176270, 5037.575684 )
 
 local table_insert = table.insert
 local math_random = math.random
@@ -183,13 +184,9 @@ function ENT:Initialize()
 	self:SetMaxHealth( 4194304 )
 	self:SetBloodColor( -1 )
 	self:SetModelScale( 4.725 )
-	self:SetCollisionBounds( self.vHullMins, self.vHullMaxs )
-	local f = self:GetModelScale()
-	self.vHullMins = self.vHullMins * f
-	self.vHullMaxs = self.vHullMaxs * f
-	self:PhysicsInit( SOLID_OBB )
+	self:SetCollisionBounds( self.vHullMins / 4.725, self.vHullMaxs / 4.725 )
+	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
-	//print(self:GetCollisionBounds())
 	local pPhys = self:GetPhysicsObject()
 	if IsValid( pPhys ) then pPhys:EnableGravity( false )
 	else self:Remove() return end
