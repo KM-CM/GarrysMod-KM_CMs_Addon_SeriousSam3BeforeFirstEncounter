@@ -36,7 +36,7 @@ ENT.flIdleStandTimeMax = 0
 ENT.bCombatForgetLastHostile = true
 
 ENT.flTopSpeed = 160
-ENT.flProwlSpeed = ENT.flTopSpeed
+ENT.flRunSpeed = ENT.flTopSpeed
 ENT.flWalkSpeed = 75
 
 function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )

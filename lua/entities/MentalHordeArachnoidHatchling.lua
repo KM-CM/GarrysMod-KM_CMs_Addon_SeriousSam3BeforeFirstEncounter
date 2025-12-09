@@ -31,7 +31,7 @@ ENT.flIdleStandTimeMin = 0
 ENT.flIdleStandTimeMax = 0
 
 ENT.flTopSpeed = 178.57
-ENT.flProwlSpeed = ENT.flTopSpeed
+ENT.flRunSpeed = ENT.flTopSpeed
 ENT.flWalkSpeed = ENT.flTopSpeed
 
 function ENT:MoveAlongPath( pPath, flSpeed, _, tFilter )

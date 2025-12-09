@@ -53,7 +53,7 @@ ENT.flIdleStandTimeMin = 0
 ENT.flIdleStandTimeMax = 0
 
 ENT.flTopSpeed = 400
-ENT.flProwlSpeed = ENT.flTopSpeed
+ENT.flRunSpeed = ENT.flTopSpeed
 ENT.flWalkSpeed = ENT.flTopSpeed
 
 ENT.bCombatForgetLastHostile = true

@@ -46,7 +46,7 @@ ENT.flVisionPitch = 180
 ENT.flVisionYaw = 180
 
 ENT.flTopSpeed = 8192
-ENT.flProwlSpeed = 4096
+ENT.flRunSpeed = 4096
 ENT.flWalkSpeed = 1024
 ENT.flAcceleration = 8192
 

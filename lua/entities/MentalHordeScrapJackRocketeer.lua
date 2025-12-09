@@ -43,7 +43,7 @@ ENT.flIdleStandTimeMin = 0
 ENT.flIdleStandTimeMax = 0
 
 ENT.flTopSpeed = 65
-ENT.flProwlSpeed = ENT.flTopSpeed
+ENT.flRunSpeed = ENT.flTopSpeed
 ENT.flWalkSpeed = ENT.flTopSpeed
 
 function ENT:GetShootPos() return self:GetPos() + self:OBBCenter() end
