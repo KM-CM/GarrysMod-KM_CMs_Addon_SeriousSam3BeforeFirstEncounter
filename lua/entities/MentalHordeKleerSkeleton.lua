@@ -91,7 +91,8 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonInLeap", function( self, sched 
 	if CurTime() > sched.flEndTimeFull then return true end
 	if CurTime() > sched.flEndTimeVelocity then return end
 	self:AnimationSystemHalt()
-	self.vDesAim = self:GetForward()
+	self.vaAimTargetBody = self:GetAngles()
+	self.vaAimTargetPose = self.vaAimTargetBody
 	self.loco:Approach( self:GetPos(), 1 )
 	self.loco:SetVelocity( self:GetForward() * self.flLeapSpeed )
 	local tHit = sched.tHit || {}
@@ -138,7 +139,8 @@ Actor_RegisterSchedule( "MentalHordeKleerSkeletonCombat", function( self, sched 
 	if self:Visible( enemy ) && v:DistToSqr( enemy:NearestPoint( v ) ) <= f * f then
 		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
 		if self:GetForward():Dot( d ) > .999 then self:SetSchedule "MentalHordeKleerSkeletonInLeap" return end
-		self.vDesAim = d
+		self.vaAimTargetBody = d:Angle()
+		self.vaAimTargetPose = self.vaAimTargetBody
 	else
 		local goal = pPath:GetCurrentGoal()
 		local v = self:GetPos()

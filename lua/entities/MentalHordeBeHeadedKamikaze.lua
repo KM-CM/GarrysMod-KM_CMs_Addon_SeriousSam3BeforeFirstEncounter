@@ -79,7 +79,7 @@ Actor_RegisterSchedule( "MentalHordeBeHeadedKamikazeCombat", function( self, sch
 	self:MoveAlongPath( pPath, self.flTopSpeed )
 	local goal = pPath:GetCurrentGoal()
 	local v = self:GetPos()
-	if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+	if goal then self.vaAimTargetBody = ( goal.pos - v ):Angle() self.vaAimTargetPose = self.vaAimTargetBody end
 	local f = EXPLOSION_RADIUS * .5
 	f = f * f
 	v = v + self:GetUp() * 50

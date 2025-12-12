@@ -80,9 +80,9 @@ Actor_RegisterSchedule( "MentalHordeBeHeadedRocketeerCombat", function( self, sc
 	if !pPath then pPath = Path "Follow" sched.pPath = pPath end
 	self:ComputeFlankPath( pPath, enemy )
 	self:MoveAlongPath( pPath, self.flTopSpeed )
-	if CurTime() > self.flWalk && self:Visible( enemy ) then
+	if CurTime() > self.flWalk && self:Visible( enemy ) && self.vaAimTargetBody then
 		self:SelectAim( enemy, self:GetShootPos(), 2048, 96, 24 )
-		if self:GetAimVector():Dot( self.vDesAim ) < .999 then return end
+		if self:GetAimVector():Dot(  isangle( self.vaAimTargetBody ) && self.vaAimTargetBody:Forward() || ( self.vaAimTargetBody - self:GetShootPos() ):GetNormalized() ) < .999 then return end
 		local pProjectile = self:CreateProjectile "MentalHordeRocketSmall"
 		if !IsValid( pProjectile ) then return end
 		pProjectile:SetPos( self:GetShootPos() )
@@ -94,7 +94,7 @@ Actor_RegisterSchedule( "MentalHordeBeHeadedRocketeerCombat", function( self, sc
 	else
 		local goal = pPath:GetCurrentGoal()
 		local v = self:GetPos()
-		if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+		if goal then self.vaAimTargetBody = ( goal.pos - v ):Angle() self.vaAimTargetPose = self.vaAimTargetBody end
 	end
 end )
 

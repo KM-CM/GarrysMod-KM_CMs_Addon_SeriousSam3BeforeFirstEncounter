@@ -101,7 +101,8 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerCombat", function( self, s
 	if sched.bBeganAttack then
 		if !self:Visible( enemy ) then sched.bBeganAttack = nil return end
 		local d = ( enemy:GetPos() + enemy:OBBCenter() - ( self:GetPos() + self:OBBCenter() ) ):GetNormalized()
-		self.vDesAim = d
+		self.vaAimTargetBody = d:Angle()
+		self.vaAimTargetPose = self.vaAimTargetBody
 		if self:GetAimVector():Dot( d ) > math.cos( math.rad( self.flTurnRate ) ) then
 			self:SetSchedule( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1.5, 12 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootRage" ||
 			( math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .66, self:GetMaxHealth(), 12, 2 ) ) <= 1 && "MentalHordeScrapJackRocketeerShootWeak" ||
@@ -111,7 +112,7 @@ Actor_RegisterSchedule( "MentalHordeScrapJackRocketeerCombat", function( self, s
 	elseif self:Visible( enemy ) && math.Rand( 0, math.Remap( self:Health(), self:GetMaxHealth() * .33, self:GetMaxHealth(), 1, 10000 ) * FrameTime() ) <= 1 then sched.bBeganAttack = true return end
 	local goal = pPath:GetCurrentGoal()
 	local v = self:GetPos()
-	if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+	if goal then self.vaAimTargetBody = ( goal.pos - v ):Angle() self.vaAimTargetPose = self.vaAimTargetBody end
 end )
 
 if !CLASS_MENTAL_HORDE then Add_NPC_Class "CLASS_MENTAL_HORDE" end

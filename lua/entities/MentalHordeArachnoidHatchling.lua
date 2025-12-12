@@ -61,12 +61,13 @@ Actor_RegisterSchedule( "MentalHordeArachnoidHatchlingCombat", function( self, s
 	self:MoveAlongPath( pPath, self.flTopSpeed )
 	if self:Visible( enemy ) then
 		self.bGun = true
-		self.vDesAim = ( enemy:GetPos() + enemy:OBBCenter() - self:GetShootPos() ):GetNormalized()
+		self.vaAimTargetBody = enemy:GetPos() + enemy:OBBCenter()
+		self.vaAimTargetPose = self.vaAimTargetBody
 	else
 		self.bGun = nil
 		local goal = pPath:GetCurrentGoal()
 		local v = self:GetPos()
-		if goal then self.vDesAim = ( goal.pos - v ):GetNormalized() end
+		if goal then self.vaAimTargetBody = ( goal.pos - v ):Angle() self.vaAimTargetPose = self.vaAimTargetBody end
 	end
 end )
 
@@ -115,10 +116,10 @@ function ENT:Behaviour( MyTable )
 	BaseClass.Behaviour( self, MyTable )
 	if MyTable.Schedule && MyTable.Schedule.m_sName == "MentalHordeArachnoidHatchlingCombat" && MyTable.bGun then
 		MyTable.flGunRate = math.Approach( MyTable.flGunRate, 32, 12 * FrameTime() )
-		if CurTime() > MyTable.flLastShot then
+		if CurTime() > MyTable.flLastShot && MyTable.vaAimTargetBody then
 			self:FireBullets {
 				Src = self:GetShootPos(),
-				Dir = self.vDesAim,
+				Dir = isangle( MyTable.vaAimTargetBody ) && MyTable.vaAimTargetBody:Forward() || ( MyTable.vaAimTargetBody - MyTable.GetShootPos( self, MyTable ) ):GetNormalized(),
 				Tracer = 1,
 				Spread = Vector( .02, .02 ),
 				Damage = 8 // I know this is ridiculous, but, HAVE YOU SEEN HOW FAST THESE THINGS SHOOT?!
